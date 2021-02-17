@@ -1,6 +1,9 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
+const {
+  rejectUnauthenticated,
+} = require('../modules/authentication-middleware');
 
 /**
  * Get all of the items on the shelf
@@ -19,8 +22,19 @@ router.post('/', (req, res) => {
 /**
  * Delete an item if it's something the logged in user added
  */
-router.delete('/:id', (req, res) => {
-  // endpoint functionality
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
+  const id = req.params.id;
+  const query = `SELECT * FROM "item" 
+  JOIN "user" ON "user"."id" = "user_id" 
+  WHERE "user_id"=$1`;
+  pool.query(query, [id])
+    .then( result => {
+      res.send(result.rows);
+    })
+    .catch(err => {
+      console.log('ERROR: Getting all genres', err);
+      res.sendStatus(500)
+    })
 });
 
 /**
