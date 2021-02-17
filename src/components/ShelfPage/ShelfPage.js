@@ -10,6 +10,7 @@ function ShelfPage() {
 
   const handleSubmit = e => {
     e.preventDefault();
+    dispatch({ type: 'ADD_ITEM', payload: store.addItemReducer });
     setAddItemToggle(false);
   };
 

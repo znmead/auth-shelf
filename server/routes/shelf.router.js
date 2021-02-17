@@ -14,6 +14,8 @@ router.get('/', (req, res) => {
  */
 router.post('/', (req, res) => {
   // endpoint functionality
+  console.log(req.body);
+  res.sendStatus(201);
 });
 
 /**
