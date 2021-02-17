@@ -1,9 +1,7 @@
 const express = require('express');
 const pool = require('../modules/pool');
 const router = express.Router();
-const {
-  rejectUnauthenticated,
-} = require('../modules/authentication-middleware');
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
 /**
  * Get all of the items on the shelf
@@ -15,14 +13,26 @@ router.get('/', (req, res) => {
 /**
  * Add an item for the logged in user to the shelf
  */
-router.post('/', (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
   // endpoint functionality
+  console.log('Adding new shelf item to DB');
+  const queryText = `INSERT INTO "item" ("description", "image_url", "user_id")
+                    VALUES ($1, $2, ${req.user.id});`;
+
+  pool.query(queryText, [req.body.itemDescription, req.body.itemUrl]).then(() => {
+    console.log('Item added to shelf successfully');
+    res.sendStatus(201);
+  }).catch(err => {
+    console.log('Error in post', error);
+    res.sendStatus(500);
+  });
 });
 
 /**
  * Delete an item if it's something the logged in user added
  */
 router.delete('/:id', rejectUnauthenticated, (req, res) => {
+  console.log(`Deleting shelf item ${req.item.id} from:`, req.user.id)
   const id = req.params.id;
   const query = `SELECT * FROM "item" 
   JOIN "user" ON "user"."id" = "user_id" 
