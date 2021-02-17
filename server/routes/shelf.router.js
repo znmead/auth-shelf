@@ -42,7 +42,7 @@ router.delete('/:id', rejectUnauthenticated, (req, res) => {
       res.send(result.rows);
     })
     .catch(err => {
-      console.log('ERROR: Getting all genres', err);
+      console.log('ERROR deleting item', err);
       res.sendStatus(500)
     })
 });
