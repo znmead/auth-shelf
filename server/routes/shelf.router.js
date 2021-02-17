@@ -34,8 +34,7 @@ router.post('/', rejectUnauthenticated, (req, res) => {
 router.delete('/:id', (req, res) => {
   //console.log(`Deleting shelf item ${req.item.id} from:`, req.user.id)
   const id = req.params.id;
-  const query = `SELECT * FROM "item" 
-  JOIN "user" ON "user"."id" = "user_id" 
+  const query = `DELETE FROM "item" 
   WHERE "user_id"=$1`;
   pool.query(query, [id])
     .then( result => {
