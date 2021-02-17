@@ -31,8 +31,8 @@ router.post('/', rejectUnauthenticated, (req, res) => {
 /**
  * Delete an item if it's something the logged in user added
  */
-router.delete('/:id', rejectUnauthenticated, (req, res) => {
-  console.log(`Deleting shelf item ${req.item.id} from:`, req.user.id)
+router.delete('/:id', (req, res) => {
+  //console.log(`Deleting shelf item ${req.item.id} from:`, req.user.id)
   const id = req.params.id;
   const query = `SELECT * FROM "item" 
   JOIN "user" ON "user"."id" = "user_id" 
