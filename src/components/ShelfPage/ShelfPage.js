@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import useReduxStore from '../../hooks/useReduxStore';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 function ShelfPage() {
   let [addItemToggle, setAddItemToggle] = useState(false);
-
+  const shelf = useSelector(store => store.shelf)
+  React.useEffect(() => {
+    dispatch({ type: "FETCH_ITEMS" });
+  }, []);
   const dispatch = useDispatch();
   const store = useReduxStore();
 
@@ -21,8 +24,10 @@ function ShelfPage() {
   return (
     <div className="container">
       <h2>Shelf</h2>
+      <pre>{JSON.stringify(shelf)}</pre>
       {addItemToggle ?
         <>
+        
           <form onSubmit={handleSubmit}>
             <label htmlFor='input-description'>Item Description: </label>
             <input type='text' id='input-description' value={store.addItemReducer.itemDescription} onChange={handleDescChange} required />
