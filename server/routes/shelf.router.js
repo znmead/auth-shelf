@@ -6,7 +6,7 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 /**
  * Get all of the items on the shelf
  */
-router.get('/', rejectUnauthenticated, (req, res) => {
+router.get('/', (req, res) => {
   let query = 'SELECT * FROM "item";'
   pool
   .query(query).then(
